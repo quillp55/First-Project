@@ -1,0 +1,5 @@
+Hi
+
+This is my first Git project.
+
+I'm going to push this txt file into GitHub using PUSH request. 
