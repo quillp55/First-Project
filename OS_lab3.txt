@@ -1,0 +1,140 @@
+1)
+
+program Sindhu_202419TW095
+  shared_counter = 0
+
+  sub increment_thread as thread
+    for i = 1 to 100
+      temp = shared_counter
+      temp = temp + 1
+      shared_counter = temp
+    next
+  end sub
+
+  call increment_thread
+  call increment_thread
+  wait
+
+  writeln("Final Counter (Unsynchronized) = ", shared_counter)
+end
+
+
+
+program Sindhu_095
+  shared_counter = 0
+
+  sub increment_thread as thread
+    synchronise
+      for i = 1 to 100
+        temp = shared_counter
+        temp = temp + 1
+        shared_counter = temp
+      next
+  end sub
+
+  call increment_thread
+  call increment_thread
+  wait
+
+  writeln("Final Counter (Synchronized) = ", shared_counter)
+end
+
+Attach **Screenshots Output console logs for Unsynchronized & Synchronized
+
+-----------------------------------------------------------------------------------------
+
+2)
+
+program Sindhu_202419TW095
+  var x integer
+  var y integer
+
+  for i = 1 to 30
+    x = i * 2
+    y = x + 5
+  next
+
+  writeln("Execution complete. Final Y = ", y)
+end
+
+
+**1. Provide a snapshot of the Page Table / Memory Allocation window and show PCB window**
+
+Attach **Screenshot 1 (Main Memory RAM)**, which shows:
+
+- Page Number: 0
+- Frame Number: 0
+- Process ID: 1
+- Allocated Memory: 256 bytes
+
+**2. State the Logical Base Address and Physical Base Address assigned to your process.**
+
+- **Logical Base Address:** 0
+- **Physical Base Address:** 0
+
+The process's logical page 0 is mapped to physical frame 0. With a page size of 256 bytes, the starting physical address of frame 0 is 0.
+
+**3. How many total pages were allocated to the process?**
+
+**Total Pages Allocated: 1 page (256 bytes).**
+
+The Process Control Block (PCB) confirms **Memory Size = 1 page**, and the Main Memory window shows one allocated frame of 256 bytes.
+
+-----------------------------------------------------------------------------------------
+
+3)
+
+program Sindhu_2024
+    wait(S1)
+    wait(S2)
+    signal(S2)
+    signal(S1)
+end
+
+program Sindhu_2024
+    wait(S2)
+    wait(S1)
+    signal(S1)
+    signal(S2)
+end
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+program p1_Duh
+    var S1 integer
+    var S2 integer
+
+    S1 = 1
+    S2 = 1
+
+    semaphore(wait, S1)
+    semaphore(wait, S2)
+    semaphore(signal, S2)
+    semaphore(signal, S1)
+end
+
+program p2_Duh
+    var S1 integer
+    var S2 integer
+
+    S1 = 1
+    S2 = 1
+
+    semaphore(wait, S2)
+    semaphore(wait, S1)
+    semaphore(signal, S1)
+    semaphore(signal, S2)
+end
+
+**Answer:**
+
+Attach **Screenshots of View Resources, Show Dead Locked Process
+
+The Process List shows that both **P1_DUH (PID 2)** and **P2_DUH (PID 3)** are in the **WAITING / BLOCKED** state due to a circular wait.
+
+- **P1** holds semaphore **S1** and waits for semaphore **S2**.
+- **P2** holds semaphore **S2** and waits for semaphore **S1**.
+
+Neither process can proceed because each is waiting for the semaphore held by the other process, resulting in a **deadlock**.
+
+
